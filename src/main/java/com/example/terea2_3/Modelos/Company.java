@@ -1,5 +1,5 @@
 package com.example.terea2_3.Modelos;
-
+//Clase Company
 public class Company {
     private Integer id ;
     private String name ;

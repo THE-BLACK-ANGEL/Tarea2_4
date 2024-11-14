@@ -25,7 +25,6 @@ public class CompanyDAO {
              ) {
                 statement.setString(1, "%" + nombre + "%");
                 ResultSet resultSet = statement.executeQuery();
-
             //Mientras hayan registros en la tabla a la que accedemos se almacenaran los datos de los registros de la siguiente manera
             //a un objeto temporal de tipo Company para finalmente añadir estos a la lista de tipo Company "companies".
             while (resultSet.next()) {
@@ -80,8 +79,8 @@ public class CompanyDAO {
 
     }
     //Metodo para editar la informacion de una compañia de la base de datos
-    public static void editarCompany(Company company,String companyCopia) throws SQLException {
-        String sql = "UPDATE res_company SET name = ?, partner_id = ?, currency_id = ? WHERE name =" + "'"+companyCopia+"'";
+    public static void editarCompany(Company company,Integer companyCopiaId) throws SQLException {
+        String sql = "UPDATE res_company SET name = ?, partner_id = ?, currency_id = ? WHERE id = ?";
 
         try (Connection conexion = ConexionBaseDatos.getConnection();
              PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
@@ -89,6 +88,8 @@ public class CompanyDAO {
             preparedStatement.setString(1, company.getName());
             preparedStatement.setInt(2, company.getPartner_id());
             preparedStatement.setInt(3, company.getCurrency_id());
+            preparedStatement.setInt(4, companyCopiaId);
+
 
             preparedStatement.executeUpdate();
         }

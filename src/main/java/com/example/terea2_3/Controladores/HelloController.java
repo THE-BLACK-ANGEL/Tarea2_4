@@ -2,6 +2,7 @@ package com.example.terea2_3.Controladores;
 
 import com.example.terea2_3.Modelos.Company;
 import com.example.terea2_3.DAO.CompanyDAO;
+import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +18,7 @@ public class HelloController {
     @FXML
     private TableColumn<Company, String> tcName;
     @FXML
-    private TableColumn<Company, String> tcID;
+    private TableColumn<Company, Integer> tcID;
     @FXML
     private TableColumn<Company,Integer> tcPropietario;
     @FXML
@@ -28,6 +29,8 @@ public class HelloController {
 
     @FXML
     private TextField tfNombre;
+
+    private ObservableList<Company> datos = FXCollections.observableArrayList();
 
     public void initialize() throws SQLException {
 
@@ -40,7 +43,7 @@ public class HelloController {
         //CARGAR DATOS DESDE EL INICIO DEL PROGRAMA DE LA BASE DE DATOS
 
         List<Company> companies = CompanyDAO.buscarCompaniesNombre("");
-        ObservableList<Company> datos = FXCollections.observableList(companies);
+        datos = FXCollections.observableList(CompanyDAO.buscarCompaniesNombre(""));
         tvDatos.setItems(datos);
 
     }
@@ -54,12 +57,9 @@ public class HelloController {
             //la tabla res_company gracias al metodo de la clase CompanyDAO (interfaz que hace de intermedaria entre la base de datos de odoo y el controlador
             //de la aplicacion) de buscar companies por el nombre.
             List<Company> companies = CompanyDAO.buscarCompaniesNombre(tfNombre.getText());
-
-            //Permitimos que se puedan ver los datos la lista companies y que esta refleje los cambios que se realizen de forma automatica
-            ObservableList<Company> datos = FXCollections.observableArrayList(companies);
-
-            //Lo siguiente que haremos es decirle a la tabla que muestre los datos de la lista
-            tvDatos.setItems(datos);
+            //Lo siguiente que haremos es decirle a la tabla que muestre los datos de la lista asignando a la lista observable los datos encontrados tras la busqueda
+            datos.setAll(companies);
+            //tvDatos.setItems(datos);
 
         } catch (SQLException e) {
             System.err.println("Error de SQL al consultar: " + e.getMessage());
@@ -114,7 +114,8 @@ public class HelloController {
                 company.setPartner_id(0);
             }
             CompanyDAO.insertarCompany(company);
-            //Llamamos al metodo buscar para que se vean los cambios realizados ya que al buscar sin indicar ningun filtrado, nos muestra todos los elementos de la base de datos de forma actualizada
+
+            datos.add(company);
             onBtnBuscar(actionEvent);
 
         }catch (Exception e) {
@@ -146,7 +147,10 @@ public class HelloController {
                 showAlert("Éxito", "Compañía eliminada exitosamente.");
 
                 // Actualizar la tabla después de eliminar
-                onBtnBuscar(actionEvent); // Esto recargará los datos de la tabla
+
+                datos.remove(selectedCompany);
+                //Esto recarga los datos de la tabla ya que llamamos al metodo del boton buscar sin nada dentro de forma que muestra toda la informacion de la tabla
+                onBtnBuscar(actionEvent);
             } catch (SQLException e) {
                 System.err.println("Error de SQL al eliminar: " + e.getMessage());
                 showAlert("Error", "Error de SQL al eliminar: " + e.getMessage());
@@ -163,7 +167,7 @@ public class HelloController {
         Company selectedCompany = tvDatos.getSelectionModel().getSelectedItem();
         if (selectedCompany != null) {
             try {
-                String companyNombreCopia = selectedCompany.getName();
+                Integer companyID = selectedCompany.getId();
                 //Declaramos el dialogo para cambiar el valor de name y en caso de que no se introduzca nada el valor seguira siendo el mismo
                 TextInputDialog dialogName = new TextInputDialog();
                 //Variable de control
@@ -189,7 +193,7 @@ public class HelloController {
                 if (result2.isPresent()) {
                     selectedCompany.setCurrency_id(Integer.parseInt(result2.get()));
                 } else {
-                    selectedCompany.setId(selectedCompany.getId());
+                    selectedCompany.setCurrency_id(selectedCompany.getCurrency_id());
                 }
 
                 //Declaramos el dialogo para cambiar el valor de la id del socio y en caso de que no se introduzca nada el valor seguira siendo el mismo
@@ -205,10 +209,10 @@ public class HelloController {
                 }
 
                 // Llamar al metodo de actualizarCompany en el DAO
-                CompanyDAO.editarCompany(selectedCompany,companyNombreCopia);
+                CompanyDAO.editarCompany(selectedCompany,companyID);
 
                 // Recargar la tabla para reflejar los cambios
-                onBtnBuscar(actionEvent); // Esto recargará la tabla con los datos actualizados
+                // onBtnBuscar(actionEvent); // Esto recargará la tabla con los datos actualizados
 
             } catch (SQLException e) {
                 System.err.println("Error al actualizar la compañía: " + e.getMessage());

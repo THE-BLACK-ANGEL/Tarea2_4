@@ -1,9 +1,9 @@
 .root{
-    -fx-background-color: #c1bebe;
+    -fx-background-color: #53f30d;
 }
 #labelC{
     -fx-font-weight: bold;
-    -fx-text-fill: #0035ff;
+    -fx-text-fill: #040000;
     -fx-font-family: Arial ;
 }
 #tfNombre{

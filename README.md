@@ -2,7 +2,7 @@
 
 
 
-> [!TIP]
+> [!NOTE]
 > Esta practica es una mejora de la actividad 2.3 encontrada en uno de mis repositorios en la que implementamos busqueda a tiempo real y cambiamos las variables del objeto company (el que usaremos en ambas actividades) a propiedades.
 
 

@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Clase en la que realizamos las operaciones para
- * obtener, editar y eliminar las compañías a trabes de
- * la interacción con la base de datos.
- *
- * @author Angel Muñoz
- * @version 1.0
- * @since 1.0
- */
+* Clase en la que realizamos las operaciones para
+* obtener, editar y eliminar las compañías a trabes de
+* la interacción con la base de datos.
+*
+* @author Angel Muñoz
+* @version 1.0
+* @since 1.0
+*/
 public class CompanyDao {
 
   /**

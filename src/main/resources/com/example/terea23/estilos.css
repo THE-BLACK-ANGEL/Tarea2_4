@@ -1,0 +1,12 @@
+.root{
+    -fx-background-color: #53f30d;
+}
+#labelC{
+    -fx-font-weight: bold;
+    -fx-text-fill: #040000;
+    -fx-font-family: Arial ;
+}
+#tfNombre{
+    -fx-border-color:black ;
+}
+
